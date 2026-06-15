@@ -164,13 +164,6 @@ analysis/adaptation_mechanism.do
 
 These scripts are provided to document the econometric specifications used for the approval, development-scale, heterogeneity, and adaptation-mechanism analyses. They require the restricted analysis dataset constructed from the full planning corpus, geocoded site-level variables, flood-risk overlays, and PlanRAG outputs.
 
-## Reproducing manuscript results
-
-This repository documents the code structure and provides a runnable demonstration of the PlanRAG classification workflow. Full reproduction of the manuscript tables and figures requires the restricted application-level analysis dataset, which combines the full planning corpus, geocoded site-level variables, flood-risk spatial joins, and manually validated labels. These restricted data are not publicly redistributed in this repository.
-
-## Data availability
-
-This repository provides code, a small demo input file, and an expected demo output file for transparency and review. The full planning-application corpus, geocoded application-level dataset, flood-risk spatial joins, and manually coded validation labels are not publicly redistributed here.
 
 ## Citation
 

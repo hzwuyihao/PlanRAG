@@ -1,0 +1,152 @@
+{
+  "schema_version": "1.0",
+  "description": "Classification schema for PlanRAG. Each application is classified along every category below. Categories are independent: an application can be positive on multiple categories (for example, a 'new_build' that also contains 'flood_adaptation').",
+  "categories": {
+    "relevance": {
+      "type": "single_label",
+      "description": "Whether the application is a residential development proposal of analytical interest.",
+      "values": [
+        {
+          "label": "residential_development",
+          "definition": "The application proposes substantive residential development, including new build, redevelopment, extension, conversion, or retrofit of housing. Applications proposing residential changes that materially affect the housing stock fall here."
+        },
+        {
+          "label": "residential_minor",
+          "definition": "The application concerns minor residential changes that do not alter the housing stock in a substantive way, such as fences, boundary walls, replacement windows, satellite dishes, or small-scale alterations that do not constitute new floor area or new dwellings."
+        },
+        {
+          "label": "administrative_only",
+          "definition": "The application is administrative or procedural rather than a development proposal. Examples include tree works applications, lawful development certificate applications, prior approval notifications without substantive change, advertisement consents, and discharge-of-condition applications."
+        }
+      ]
+    },
+    "housing_supply_channel": {
+      "type": "single_label",
+      "description": "The mechanism through which the proposal affects housing supply. Classify only if 'relevance' is 'residential_development'; otherwise return null.",
+      "values": [
+        {
+          "label": "new_build",
+          "definition": "Construction of new dwellings on a site that was not previously residential, or construction of additional dwellings on a site as a separate structure. Includes the demolition-and-rebuild of an existing structure where the new structure provides additional dwellings."
+        },
+        {
+          "label": "redevelopment",
+          "definition": "Demolition of an existing building (residential or non-residential) and replacement with a residential building, where the new building delivers a different scale, layout, or unit count from the demolished structure. Distinct from 'new_build' in that it explicitly involves replacement of existing built form."
+        },
+        {
+          "label": "extension",
+          "definition": "Addition of floor area to an existing dwelling without creating a separate self-contained unit. Includes side, rear, wraparound, and roof extensions; loft conversions that remain within a single dwelling; and outbuilding additions used as ancillary residential space."
+        },
+        {
+          "label": "conversion_subdivision",
+          "definition": "Change of use of an existing building, or subdivision of an existing dwelling, that creates one or more additional self-contained dwellings without significant new construction. Includes house-to-flat conversions, commercial-to-residential conversions, and HMO formation."
+        },
+        {
+          "label": "retrofit_general",
+          "definition": "Modification of an existing dwelling that does not add floor area or change the number of dwellings, but that materially alters the building fabric. Includes insulation upgrades, fenestration replacement, energy retrofits, and resilience upgrades that are not separately classified as flood adaptation."
+        }
+      ]
+    },
+    "land_use_change": {
+      "type": "single_label",
+      "description": "Net change in residential land use implied by the proposal.",
+      "values": [
+        {
+          "label": "residential_gain",
+          "definition": "The proposal converts non-residential floor space or land to residential use."
+        },
+        {
+          "label": "residential_loss",
+          "definition": "The proposal converts residential floor space or land to non-residential use."
+        },
+        {
+          "label": "no_change",
+          "definition": "The proposal does not alter the residential/non-residential balance of the site."
+        }
+      ]
+    },
+    "net_stock_effect": {
+      "type": "structured",
+      "description": "The proposal's effect on the residential dwelling stock.",
+      "fields": {
+        "direction": {
+          "values": [
+            {
+              "label": "intensification",
+              "definition": "The proposal increases the number of residential dwellings on the site."
+            },
+            {
+              "label": "deintensification",
+              "definition": "The proposal decreases the number of residential dwellings on the site (for example, by merging two flats into one)."
+            },
+            {
+              "label": "no_change",
+              "definition": "The proposal does not change the number of dwellings on the site."
+            }
+          ]
+        },
+        "net_units_change": {
+          "type": "integer_or_null",
+          "definition": "The explicit or directly inferable net change in dwelling units. Positive for intensification, negative for deintensification. Return null if the description does not state or directly imply a numeric net change."
+        }
+      }
+    },
+    "climate_adaptation": {
+      "type": "binary",
+      "description": "Whether the application text contains language referring to flood-risk adaptation or sustainable drainage measures.",
+      "values": [
+        {
+          "label": "adaptation_present",
+          "definition": "The description explicitly references sustainable drainage systems (SuDS), permeable surfacing or paving, attenuation features (tanks, basins, ponds), green roofs deployed for stormwater management, swales, rain gardens, infiltration features, raised thresholds for flood resilience, or related nature-based or engineered measures intended to manage surface water, reduce runoff, or improve flood resilience. References must be substantive; the mere mention of 'drainage' or 'landscaping' without flood-management context does not qualify."
+        },
+        {
+          "label": "adaptation_absent",
+          "definition": "The description does not reference any of the measures listed under 'adaptation_present'."
+        }
+      ]
+    },
+    "housing_typology": {
+      "type": "single_label",
+      "description": "The primary housing typology of the dwellings affected by the proposal. Classify only if 'relevance' is 'residential_development'; otherwise return null.",
+      "values": [
+        {
+          "label": "single_dwelling_house",
+          "definition": "Detached single-family house, including bungalows."
+        },
+        {
+          "label": "semi_detached",
+          "definition": "Semi-detached house, sharing one party wall with an adjacent dwelling."
+        },
+        {
+          "label": "terraced",
+          "definition": "Terraced or row house, sharing party walls with adjacent dwellings on both sides (except end-of-terrace, which is still classified as terraced)."
+        },
+        {
+          "label": "flat",
+          "definition": "Self-contained flat within a larger building, including purpose-built apartment blocks and converted maisonettes."
+        },
+        {
+          "label": "hmo",
+          "definition": "House in Multiple Occupation, with shared facilities and three or more unrelated occupants."
+        },
+        {
+          "label": "mixed_residential_type",
+          "definition": "A development that includes more than one housing typology (for example, a scheme with both flats and terraced houses)."
+        }
+      ]
+    },
+    "affordability": {
+      "type": "binary",
+      "description": "Whether the application explicitly indicates an affordable-housing component.",
+      "values": [
+        {
+          "label": "affordable_indicated",
+          "definition": "The description explicitly references affordable housing, social housing, shared-ownership units, intermediate housing, London Living Rent, or a section 106 agreement specifying affordable provision."
+        },
+        {
+          "label": "affordable_not_indicated",
+          "definition": "The description does not reference any affordable-housing component."
+        }
+      ]
+    }
+  }
+}

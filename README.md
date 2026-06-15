@@ -1,6 +1,6 @@
 # PlanRAG
 
-PlanRAG is a retrieval-augmented language-model pipeline for extracting structured development attributes from unstructured planning-permission text. It was developed for the paper **“Compliance costs constrain climate-adaptive housing supply in flood-exposed cities”**, which studies how flood-risk regulation shapes residential development in Greater London. The repository is intended to make the code logic transparent for review. It also includes a small demo input file and analysis scripts.
+PlanRAG is a retrieval-augmented language-model pipeline for extracting structured development attributes from unstructured planning-permission text. It was developed for the paper **“Compliance costs constrain climate-adaptive housing supply in flood-exposed cities”**, which studies how flood-risk regulation shapes residential development in Greater London. The repository is intended to make the code logic transparent for review. It also includes a demo input file and analysis scripts.
 
 ## Repository structure
 

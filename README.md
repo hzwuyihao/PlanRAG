@@ -1,6 +1,6 @@
 # PlanRAG
 
-PlanRAG is a retrieval-augmented language-model pipeline for extracting structured development attributes from unstructured planning-permission text. It was developed for the paper **“Compliance costs constrain climate-adaptive housing supply in flood-exposed cities”**, which studies how flood-risk regulation shapes residential development in Greater London. The repository is intended to make the code logic transparent for review. It also includes a demo input file and analysis scripts.
+PlanRAG is a retrieval-augmented language-model pipeline for extracting structured development attributes from unstructured planning-permission text. It was developed for the paper **“Compliance costs constrain climate-adaptive housing supply in flood-exposed cities”**, which studies how flood-risk regulation shapes residential development in Greater London. The repository is intended to make the code logic transparent for review. It includes source code, prompt files, a demo input file, an example expected output file, and analysis scripts.
 
 ## Repository structure
 
@@ -11,7 +11,8 @@ PlanRAG/
 │   ├── heterogeneity.do
 │   └── adaptation_mechanism.do
 ├── data/
-│   └── demo_input.csv
+│   ├── demo_input.csv
+│   └── demo_expected_output.csv
 ├── planrag/
 │   ├── __init__.py
 │   ├── classifier.py
@@ -41,9 +42,10 @@ The repository includes:
 
 ```text
 data/demo_input.csv
+data/demo_expected_output.csv
 ```
 
-This file contains a small set of planning-application descriptions for demonstrating the required input format. The minimum required columns are:
+`data/demo_input.csv` contains a small set of planning-application descriptions for demonstrating the required input format. The minimum required columns are:
 
 ```text
 application_reference
@@ -59,9 +61,13 @@ decision_date
 
 These auxiliary fields are preserved in the output but are not required by the core PlanRAG pipeline.
 
+`data/demo_expected_output.csv` provides an example of the expected output structure from running PlanRAG on the demo input. It is included as a smoke-test reference for editors and reviewers. Because the live demo relies on an external LLM API, exact explanatory text and confidence values may vary slightly across runs, but the output should preserve the input columns and append structured classification fields.
+
 The full application-level dataset used in the paper is not included because it contains large-scale planning records, geocoded site information, flood-risk joins, and validation annotations used during the review process.
 
-## Python requirements
+## System requirements
+
+The code requires Python 3.10 or later. It has been tested on macOS using a standard desktop/laptop environment. No non-standard hardware is required.
 
 The core Python pipeline uses:
 
@@ -73,11 +79,17 @@ sentence-transformers
 openai
 ```
 
+The empirical scripts in `analysis/` require Stata and user-written table-export commands where applicable.
+
+## Installation
+
 A typical installation is:
 
 ```bash
 pip install pandas numpy tqdm sentence-transformers openai
 ```
+
+Typical installation time on a normal desktop computer is approximately 5–15 minutes, depending on internet speed, Python environment, and whether the sentence-transformer model needs to be downloaded for the first time. Installation may take longer on a fresh machine or restricted institutional network.
 
 ## Running the demo
 
@@ -111,6 +123,14 @@ The output file will be written to:
 data/demo_output.csv
 ```
 
+The expected output structure is shown in:
+
+```text
+data/demo_expected_output.csv
+```
+
+On a normal desktop computer, the demo runtime can range from approximately 10 to 30 minutes, depending primarily on API latency, model availability, internet connection, and whether retrieval embeddings are already available. Runs may take longer on slower networks or when external API responses are delayed.
+
 ## Cached responses
 
 The pipeline supports cached LLM responses through:
@@ -119,7 +139,7 @@ The pipeline supports cached LLM responses through:
 data/cached_llm_responses.json
 ```
 
-If `use_cache=True`, each `application_reference` in the input file must already exist in the cache. This is useful for deterministic review runs and for avoiding repeated API calls.
+If `use_cache=True`, each `application_reference` in the input file must already exist in the cache. This is useful for deterministic review runs and for avoiding repeated API calls. A cached run is expected to be substantially faster than a live API run.
 
 ## Retrieval corpus
 
@@ -138,6 +158,29 @@ passages
 
 The full reference corpus used in the paper is not redistributed in this public repository. Users who wish to run the full retrieval workflow should construct a domain-specific corpus of planning-policy passages, officer reports, decision notices, or related documents, embed the passages, and save them in the expected `.npz` format.
 
+## Instructions for use on new data
+
+To run PlanRAG on another planning-application file, prepare a CSV with at least the following columns:
+
+```text
+application_reference
+description
+```
+
+Then run:
+
+```python
+from planrag.pipeline import run_pipeline
+
+run_pipeline(
+    input_csv="path/to/your_input.csv",
+    output_csv="path/to/your_output.csv",
+    use_cache=False
+)
+```
+
+Additional columns in the input file are preserved in the output.
+
 ## Analysis scripts
 
 The `analysis/` folder contains Stata scripts corresponding to the main empirical components of the paper:
@@ -148,18 +191,22 @@ analysis/heterogeneity.do
 analysis/adaptation_mechanism.do
 ```
 
-These scripts are provided to document the econometric specifications used for the approval, development-scale, heterogeneity, and adaptation-mechanism analyses. They require the restricted analysis dataset constructed from the full planning corpus, geocoded site-level variables, flood-risk overlays, and PlanRAG outputs. 
+These scripts are provided to document the econometric specifications used for the approval, development-scale, heterogeneity, and adaptation-mechanism analyses. They require the restricted analysis dataset constructed from the full planning corpus, geocoded site-level variables, flood-risk overlays, and PlanRAG outputs.
+
+## Reproducing manuscript results
+
+This repository documents the code structure and provides a runnable demonstration of the PlanRAG classification workflow. Full reproduction of the manuscript tables and figures requires the restricted application-level analysis dataset, which combines the full planning corpus, geocoded site-level variables, flood-risk spatial joins, and manually validated labels. These restricted data are not publicly redistributed in this repository.
 
 ## Data availability
 
-This repository provides code and a small demo input file for transparency and review. The full planning-application corpus, geocoded application-level dataset, flood-risk spatial joins, and manually coded validation labels are not publicly redistributed here.
+This repository provides code, a small demo input file, and an expected demo output file for transparency and review. The full planning-application corpus, geocoded application-level dataset, flood-risk spatial joins, and manually coded validation labels are not publicly redistributed here.
 
 ## Citation
 
 If using or referring to this code, please cite the associated manuscript:
 
 ```text
-Wu, Y. and Han, F. (2026). Compliance costs constrain climate-adaptive housing supply in flood-exposed cities
+Wu, Y. and Han, F. (2026). Compliance costs constrain climate-adaptive housing supply in flood-exposed cities.
 Working paper.
 ```
 

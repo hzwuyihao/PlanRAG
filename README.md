@@ -36,35 +36,6 @@ PlanRAG converts free-text planning-application descriptions into structured var
 
 The classification fields are designed to capture development relevance, development type, housing typology, residential unit change, intensification, adaptation language, and related planning attributes.
 
-## Demo data
-
-The repository includes:
-
-```text
-data/demo_input.csv
-data/demo_expected_output.csv
-```
-
-`data/demo_input.csv` contains a small set of planning-application descriptions for demonstrating the required input format. The minimum required columns are:
-
-```text
-application_reference
-description
-```
-
-The demo file may also include auxiliary columns such as:
-
-```text
-lpa
-decision_date
-```
-
-These auxiliary fields are preserved in the output but are not required by the core PlanRAG pipeline.
-
-`data/demo_expected_output.csv` provides an example of the expected output structure from running PlanRAG on the demo input. It is included as a smoke-test reference for editors and reviewers. Because the live demo relies on an external LLM API, exact explanatory text and confidence values may vary slightly across runs, but the output should preserve the input columns and append structured classification fields.
-
-The full application-level dataset used in the paper is not included because it contains large-scale planning records, geocoded site information, flood-risk joins, and validation annotations used during the review process.
-
 ## System requirements
 
 The code requires Python 3.10 or later. It has been tested on macOS using a standard desktop/laptop environment. No non-standard hardware is required.

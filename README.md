@@ -159,7 +159,7 @@ This repository provides code and a small demo input file for transparency and r
 If using or referring to this code, please cite the associated manuscript:
 
 ```text
-Wu, Yihao. “Compliance costs constrain climate-adaptive housing supply in flood-exposed cities.”
+Wu, Y. and Han, F. (2026). Compliance costs constrain climate-adaptive housing supply in flood-exposed cities
 Working paper.
 ```
 

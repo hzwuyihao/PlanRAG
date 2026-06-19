@@ -165,14 +165,6 @@ analysis/adaptation_mechanism.do
 These scripts are provided to document the econometric specifications used for the approval, development-scale, heterogeneity, and adaptation-mechanism analyses. They require the restricted analysis dataset constructed from the full planning corpus, geocoded site-level variables, flood-risk overlays, and PlanRAG outputs.
 
 
-## Citation
-
-If using or referring to this code, please cite the associated manuscript:
-
-```text
-Wu, Y. and Han, F. (2026). Compliance costs constrain climate-adaptive housing supply in flood-exposed cities.
-Working paper.
-```
 
 ## License
 

@@ -6,7 +6,6 @@ from typing import Optional
 import pandas as pd
 from tqdm import tqdm
 
-from planrag.retrieval import retrieve
 from planrag.classifier import classify
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s | %(message)s")
@@ -14,7 +13,7 @@ logger = logging.getLogger(__name__)
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 DATA_DIR = REPO_ROOT / "data"
-PROMPTS_DIR = Path(__file__).resolve().parent / "prompts"
+PROMPTS_DIR = REPO_ROOT / "prompts"
 
 CACHE_PATH = DATA_DIR / "cached_llm_responses.json"
 SCHEMA_PATH = PROMPTS_DIR / "classification_schema.json"
@@ -50,7 +49,9 @@ def run_pipeline(
     use_cache: bool = True,
     cache_path: Optional[Path] = None,
     verbose: bool = True,
+    use_retrieval: bool = True,
 ) -> pd.DataFrame:
+    """Set use_cache=False, use_retrieval=False for description-only runs."""
     cache_path = cache_path or CACHE_PATH
 
     # ---- Load configuration and inputs -----------------------------------
@@ -84,12 +85,15 @@ def run_pipeline(
         description = row.description
 
         # Stage 1: Retrieval
-        retrieved_context = retrieve(
-            query=description,
-            top_k=TOP_K_RETRIEVAL,
-            top_k_after_rerank=TOP_K_AFTER_RERANK,
-            max_tokens=CONTEXT_WINDOW_TOKENS,
-        )
+        retrieved_context = ""
+        if use_retrieval and not use_cache:
+            from planrag.retrieval import retrieve
+            retrieved_context = retrieve(
+                query=description,
+                top_k=TOP_K_RETRIEVAL,
+                top_k_after_rerank=TOP_K_AFTER_RERANK,
+                max_tokens=CONTEXT_WINDOW_TOKENS,
+            )
 
         # Stage 2: Classification
         result = classify(

@@ -37,8 +37,14 @@ def classify(
     return classification
 
 def _build_prompt(description: str, context: str, schema: dict) -> str:
-    
-    return prompt
+    """Use reference passages for vocabulary, not application evidence."""
+    return (
+        "Classify the application description using the schema below. "
+        "Return one valid JSON object.\n\n"
+        "APPLICATION DESCRIPTION\n" + description + "\n\n"
+        "REFERENCE CONTEXT (vocabulary only)\n" + context + "\n\n"
+        "CLASSIFICATION SCHEMA\n" + json.dumps(schema, ensure_ascii=False)
+    )
 
 
 # ---------------------------------------------------------------------------

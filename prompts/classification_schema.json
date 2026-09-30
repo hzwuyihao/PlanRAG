@@ -1,5 +1,5 @@
 {
-  "schema_version": "1.0",
+  "schema_version": "1.1",
   "description": "Classification schema for PlanRAG. Each application is classified along every category below. Categories are independent: an application can be positive on multiple categories (for example, a 'new_build' that also contains 'flood_adaptation').",
   "categories": {
     "relevance": {
@@ -16,7 +16,7 @@
         },
         {
           "label": "administrative_only",
-          "definition": "The application is administrative or procedural rather than a development proposal. Examples include tree works applications, lawful development certificate applications, prior approval notifications without substantive change, advertisement consents, and discharge-of-condition applications."
+          "definition": "The application is administrative or procedural rather than a development proposal. Examples include tree works applications, lawful development certificate applications, prior approval notifications without substantive change, advertisement consents, and discharge-of-condition applications. Includes approval of details reserved by condition, section 73 variations or removals of conditions, and non-material amendments under section 96A, even if the description repeats a parent development proposal."
         }
       ]
     },
@@ -92,7 +92,7 @@
     },
     "climate_adaptation": {
       "type": "binary",
-      "description": "Whether the application text contains language referring to flood-risk adaptation or sustainable drainage measures.",
+      "description": "Whether either drainage or resistance and resilience measures are explicitly proposed in the description. Do not infer measures from designation, policy or possible future conditions.",
       "values": [
         {
           "label": "adaptation_present",
@@ -145,6 +145,34 @@
         {
           "label": "affordable_not_indicated",
           "definition": "The description does not reference any affordable-housing component."
+        }
+      ]
+    },
+    "drainage_adaptation": {
+      "type": "binary",
+      "description": "Drainage measures explicitly proposed in the application description; null for administrative-only records.",
+      "values": [
+        {
+          "label": "adaptation_present",
+          "definition": "Explicit runoff management: SuDS, permeable paving, attenuation, swales, rain gardens, infiltration, or green roofs for stormwater. Generic drainage or landscaping does not qualify."
+        },
+        {
+          "label": "adaptation_absent",
+          "definition": "No explicit runoff-management measure in the description."
+        }
+      ]
+    },
+    "resistance_resilience": {
+      "type": "binary",
+      "description": "Building resistance or resilience measures explicitly proposed in the application description; null for administrative-only records.",
+      "values": [
+        {
+          "label": "adaptation_present",
+          "definition": "Explicit flood protection of the building: raised finished floor levels or thresholds, flood barriers, flood-resistant or flood-resilient construction."
+        },
+        {
+          "label": "adaptation_absent",
+          "definition": "No explicit building flood-resistance or resilience measure in the description."
         }
       ]
     }

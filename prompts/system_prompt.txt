@@ -15,7 +15,7 @@ Step 2. Consult the reference passages where the description uses terminology, a
 
 Step 3. Reason about each classification category in turn. For each category, identify the most appropriate label given the description and the schema definitions. Be conservative: when the description does not provide sufficient evidence for a positive classification, prefer the negative label or null.
 
-Step 4. Produce a single JSON object with two top-level fields:
+Step 4. Produce a single JSON object with the following top-level fields:
 
   - "chain_of_thought": a brief paragraph (3 to 6 sentences) summarising  your reasoning about the application, including any borderline judgments. This is for auditability and should not exceed 200 words.
 
@@ -30,3 +30,10 @@ Important guidelines
 - For applications that are administrative or procedural rather than  substantive development proposals, classify "relevance" as"administrative_only" and set all downstream categories to null. Do  not attempt to infer development attributes from the application  reference number, the application type field, or other metadata outside the description text.
 
 - If the description is ambiguous and you cannot confidently assign a label, prefer null over guessing. Note the ambiguity in the  chain_of_thought field.
+
+Additional classification rules
+-------------------------------
+- Classify applications for approval of details reserved by condition, discharge of conditions, section 73 variations or removals of conditions, and non-material amendments under section 96A as administrative_only, even when their descriptions repeat residential development or drainage measures from a parent permission. Set downstream categories to null.
+- Code drainage_adaptation and resistance_resilience separately; both can be adaptation_present. Drainage manages runoff (SuDS, permeable paving, attenuation, swales, rain gardens). Resistance and resilience protect the building (raised floor levels, flood barriers, flood-resilient construction). climate_adaptation is adaptation_present when either type is explicitly proposed.
+- Code only measures stated in the application description. Do not infer adaptation from flood-zone designation, policy requirements, reference passages, or conditions that might later be imposed.
+- Retrieved officer reports and decision notices, when used, must predate the study period (2012–2018); they provide vocabulary only, never evidence about this application. An empty context window is valid: classify from the description and schema alone.
